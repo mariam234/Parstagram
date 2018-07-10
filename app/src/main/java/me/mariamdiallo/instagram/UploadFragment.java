@@ -55,6 +55,8 @@ public class UploadFragment extends Fragment {
     Bitmap bitmap;
     File imageFile;
 
+    Activity activity;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -87,6 +89,12 @@ public class UploadFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        activity = getActivity();
+        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -123,7 +131,7 @@ public class UploadFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (intent.resolveActivity(getPackageManager()) != null) {
+                if (intent.resolveActivity(activity.getPackageManager()) != null) {
                     startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
                 }
             }
@@ -146,12 +154,12 @@ public class UploadFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+/*        if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }
+        }*/
     }
 
     // adding new post to Parse database
@@ -212,7 +220,7 @@ public class UploadFragment extends Fragment {
                     bitmap.recycle();
                 }
 
-                InputStream stream = getContentResolver().openInputStream(
+                InputStream stream = activity.getContentResolver().openInputStream(
                         data.getData());
                 bitmap = BitmapFactory.decodeStream(stream);
 
@@ -233,16 +241,16 @@ public class UploadFragment extends Fragment {
 
     // converts bitmap to file
     private File bitmapToFile (Bitmap bitmap) throws IOException {
-        //create a file to write bitmap data
-        File file = new File(getCacheDir(), "new_file");
+        // create a file to write bitmap data
+        File file = new File(activity.getCacheDir(), "new_file");
         file.createNewFile();
 
-        //Convert bitmap to byte array
+        // Convert bitmap to byte array
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
         byte[] bitmapdata = bos.toByteArray();
 
-        //write the bytes in file
+        // write the bytes in file
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(bitmapdata);
         fos.flush();

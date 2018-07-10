@@ -9,28 +9,18 @@
         android:id="@+id/btCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/etDescription"
         android:layout_centerHorizontal="true"
         android:text="@string/upload_image"
         tools:layout_editor_absoluteX="148dp"
         tools:layout_editor_absoluteY="94dp" />
 
-    <Button
-        android:id="@+id/btRefresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:text="Refresh"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="0dp" />
-
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
-        android:layout_height="136dp"
-        android:layout_above="@+id/btCreate"
+        android:layout_height="72dp"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/btSelectImage"
         android:ems="10"
         android:hint="@string/description_hint"
         android:inputType="textMultiLine"
@@ -49,15 +39,15 @@
         android:id="@+id/btSelectImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btTakeImage"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
         android:text="@string/select_image" />
 
     <Button
         android:id="@+id/btTakeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/ivImage"
+        android:layout_centerHorizontal="true"
         android:text="@string/take_image" />
 
 </RelativeLayout>
