@@ -1,12 +1,37 @@
 package me.mariamdiallo.instagram;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import me.mariamdiallo.instagram.models.Post;
 
 
 /**
@@ -18,6 +43,18 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class UploadFragment extends Fragment {
+
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_SELECT = 2;
+
+    EditText etDescription;
+    Button btCreate;
+    Button btSelectImage;
+    Button btTakeImage;
+    ImageView ivImage;
+    Bitmap bitmap;
+    File imageFile;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,14 +70,6 @@ public class UploadFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UploadFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static UploadFragment newInstance(String param1, String param2) {
         UploadFragment fragment = new UploadFragment();
@@ -67,11 +96,51 @@ public class UploadFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_upload, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        // get references to views
+        etDescription = view.findViewById(R.id.etDescription);
+        btCreate = view.findViewById(R.id.btCreate);
+        btSelectImage = view.findViewById(R.id.btSelectImage);
+        btTakeImage = view.findViewById(R.id.btTakeImage);
+        ivImage = view.findViewById(R.id.ivImage);
+
+        // when "create" button is clicked, upload image to Parse post database
+        btCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String description = etDescription.getText().toString();
+                final ParseUser user = ParseUser.getCurrentUser();
+                final ParseFile parseFile = new ParseFile(imageFile);
+
+                createPost(description, parseFile, user);
+            }
+        });
+
+        // when "take image" button is pressed, start intent to take image with camera
+        btTakeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        });
+
+        // when "select image" button is pressed, start intent to select image from phone
+        btSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, REQUEST_IMAGE_SELECT);
+            }
+        });
+
     }
 
     @Override
@@ -83,6 +152,26 @@ public class UploadFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    // adding new post to Parse database
+    public void createPost(String description, ParseFile imageFile, ParseUser user) {
+        final Post newPost = new Post();
+        newPost.setDescription(description);
+        newPost.setImage(imageFile);
+        newPost.setUser(user);
+
+        newPost.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("HomeActivity", "Create post success!");
+                }
+                else {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -105,4 +194,61 @@ public class UploadFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    // shows image in view after selecting/capturing and stores it in imageFile for upload to Parse
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            // if user captured image
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+                Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+                imageFile = bitmapToFile(bitmap);
+                ivImage.setImageBitmap(bitmap);
+            }
+
+            else if (requestCode == REQUEST_IMAGE_SELECT && resultCode == Activity.RESULT_OK) {
+                // recycle unused bitmaps
+                if (bitmap != null) {
+                    bitmap.recycle();
+                }
+
+                InputStream stream = getContentResolver().openInputStream(
+                        data.getData());
+                bitmap = BitmapFactory.decodeStream(stream);
+
+                // set imageFile to user's selected image and show image in view
+                imageFile = bitmapToFile(bitmap);
+                stream.close();
+                ivImage.setImageBitmap(bitmap);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    // converts bitmap to file
+    private File bitmapToFile (Bitmap bitmap) throws IOException {
+        //create a file to write bitmap data
+        File file = new File(getCacheDir(), "new_file");
+        file.createNewFile();
+
+        //Convert bitmap to byte array
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+        byte[] bitmapdata = bos.toByteArray();
+
+        //write the bytes in file
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(bitmapdata);
+        fos.flush();
+        fos.close();
+
+        return file;
+    }
+
 }

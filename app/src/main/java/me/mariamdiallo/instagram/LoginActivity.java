@@ -12,9 +12,7 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
-import me.mariamdiallo.instagram.models.Post;
-
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsername;
     private EditText etPassword;
@@ -29,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             launchHomeActivity();
         }
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
 
         // get references to views
         etUsername = findViewById(R.id.etUsername);
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void launchHomeActivity() {
-        final Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        final Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
     }
