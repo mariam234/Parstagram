@@ -173,7 +173,7 @@ public class UploadFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("HomeActivity", "Create post success!");
+                    Log.d("MainActivity", "Create post success!");
                 }
                 else {
                     e.printStackTrace();

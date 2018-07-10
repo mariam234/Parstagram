@@ -35,8 +35,6 @@ import me.mariamdiallo.instagram.models.Post;
  */
 public class HomeFragment extends Fragment {
 
-    private Button btRefresh;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -88,17 +86,6 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        btRefresh = view.findViewById(R.id.btRefresh);
-
-        // when "refresh" button is pressed, reload posts
-        btRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadTopPosts();
-            }
-        });
-
         loadTopPosts();
     }
 
@@ -151,7 +138,7 @@ public class HomeFragment extends Fragment {
             public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
                     for (int i = 0; i < objects.size(); i++) {
-                        Log.d("HomeActivity",
+                        Log.d("MainActivity",
                                 String.format("Post[%d]=%s\nusername=%s",
                                         i, objects.get(i).getDescription(),
                                         objects.get(i).getUser().getUsername()));

@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     // The list of fragments used in the view pager. They live in the activity and we pass them down
     // to the adapter upon creation.
@@ -31,7 +31,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_main);
 
         // Create the fragments to be passed to the ViewPager
         fragments.add(new HomeFragment());
