@@ -2,6 +2,7 @@ package me.mariamdiallo.instagram;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
@@ -32,11 +33,15 @@ import me.mariamdiallo.instagram.models.Post;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_IMAGE_SELECT = 2;
+
     private EditText etDescription;
+    private Button btSelectImage;
+    private Button btTakeImage;
     private Button btCreate;
     private Button btRefresh;
     private ImageView ivImage;
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap bitmap;
     private File imageFile;
 
@@ -49,9 +54,11 @@ public class HomeActivity extends AppCompatActivity {
         etDescription = findViewById(R.id.etDescription);
         btCreate = findViewById(R.id.btCreate);
         btRefresh = findViewById(R.id.btRefresh);
+        btSelectImage = findViewById(R.id.btSelectImage);
+        btTakeImage = findViewById(R.id.btTakeImage);
         ivImage = findViewById(R.id.ivImage);
 
-        // set on click listeners for buttons
+        // when "create" button is clicked, upload image to Parse post database
         btCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +70,30 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        // when "take image" button is pressed, start intent to take image with camera
+        btTakeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        });
+
+        // when "select image" button is pressed, start intent to select image from phone
+        btSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, REQUEST_IMAGE_SELECT);
+            }
+        });
+
+        // when "refresh" button is pressed, reload posts
         btRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,13 +101,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        // prompt user to select image to post
-        pickImage(ivImage);
-
+        // load posts on create
         loadTopPosts();
 
     }
 
+    // adding new post to Parse database
     public void createPost(String description, ParseFile imageFile, ParseUser user) {
         final Post newPost = new Post();
         newPost.setDescription(description);
@@ -119,29 +149,18 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    // start intent to select image from memory
-    public void pickImage(View View) {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
-    }
-
-    // start intent to take image with camera
-    public void takeImage() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
+    // shows image in view after selecting/capturing and stores it in imageFile for upload to Parse
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // shows selected image in view
-        // from http://blog.vogella.com/2011/09/13/android-how-to-get-an-image-via-an-intent/
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK)
-            try {
+        try {
+            // if user captured image
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+                Bitmap bitmap = (Bitmap)data.getExtras().get("data");
+                imageFile = bitmapToFile(bitmap);
+                ivImage.setImageBitmap(bitmap);
+            }
+
+            else if (requestCode == REQUEST_IMAGE_SELECT && resultCode == Activity.RESULT_OK) {
                 // recycle unused bitmaps
                 if (bitmap != null) {
                     bitmap.recycle();
@@ -155,17 +174,18 @@ public class HomeActivity extends AppCompatActivity {
                 imageFile = bitmapToFile(bitmap);
                 stream.close();
                 ivImage.setImageBitmap(bitmap);
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    // creates File out of Bitmap
-    // from https://stackoverflow.com/questions/7769806/convert-bitmap-to-file
+    // converts bitmap to file
     private File bitmapToFile (Bitmap bitmap) throws IOException {
         //create a file to write bitmap data
         File file = new File(this.getCacheDir(), "new_file");

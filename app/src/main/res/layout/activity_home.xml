@@ -47,15 +47,15 @@
         app:srcCompat="@android:color/darker_gray" />
 
     <Button
-        android:id="@+id/btPickImage"
+        android:id="@+id/btSelectImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/BtTakeImage"
+        android:layout_below="@+id/btTakeImage"
         android:layout_centerHorizontal="true"
-        android:text="Select Image" />
+        android:text="@string/select_image" />
 
     <Button
-        android:id="@+id/BtTakeImage"
+        android:id="@+id/btTakeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
