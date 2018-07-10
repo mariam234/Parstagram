@@ -1,5 +1,6 @@
 package me.mariamdiallo.instagram;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,8 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import me.mariamdiallo.instagram.models.Post;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText etUsername;
@@ -20,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        if (currentUser != null) {
+            launchHomeActivity();
+        }
+
         setContentView(R.layout.activity_main);
 
         // get references to views
@@ -45,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
                     Log.d("LoginActivity", "Login Successful");
+                    launchHomeActivity();
                 }
                 else {
                     Log.e("LoginActivity", "Login Failure");
@@ -52,5 +62,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    void launchHomeActivity() {
+        final Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

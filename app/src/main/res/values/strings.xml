@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Instagram</string>
+    <string name="description_hint">Caption</string>
+    <string name="take_image">Take Image</string>
+    <string name="select_image">Select Image</string>
+    <string name="upload_image">Create Post</string>
 </resources>
