@@ -33,14 +33,10 @@ import me.mariamdiallo.instagram.models.Post;
 
 public class HomeFragment extends Fragment {
 
-    public interface ProgressBarListener{
-        public void showProgressBar();
-        public void hideProgressBar();
-    }
-
-    private ProgressBarListener progressBarListener;
     PostAdapter postAdapter;
     ArrayList<Post> posts;
+
+    ProgressBar pbProgressBar;
     RecyclerView rvPosts;
     SwipeRefreshLayout swipeContainer;
 
@@ -80,6 +76,8 @@ public class HomeFragment extends Fragment {
         // set the adapter
         rvPosts.setAdapter(postAdapter);
 
+        pbProgressBar = view.findViewById(R.id.pbProgressBar);
+
         // Setup refresh listener which triggers new data loading
         swipeContainer = view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -108,47 +106,33 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        try {
-            progressBarListener = (ProgressBarListener) context;
-        } catch (ClassCastException castException) {
-            Log.e("HomeFragment", "parent activity must implement ProgressBarListener");
-        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        progressBarListener = null;
     }
 
     // loading posts
     private void loadTopPosts() {
-
-        // progressBarListener.showProgressBar();
+        showProgressBar();
 
         final Post.Query postQuery = new Post.Query();
         postQuery.getTop().withUser();
-
-        Toast.makeText(getContext(), "getting posts...", Toast.LENGTH_SHORT).show();
 
         postQuery.findInBackground(new FindCallback<Post>() {
 
             @Override
             public void done(List<Post> postsList, ParseException e) {
-                // clear out old items
-                postAdapter.clear();
-
-                Toast.makeText(getContext(), "DONE getting posts!", Toast.LENGTH_SHORT).show();
+                hideProgressBar();
 
                 if (e == null) {
+                    // clear out old items
+                    postAdapter.clear();
 
                     for (int i = 0; i < postsList.size(); i++) {
-                        Log.d("HomeFragment",
-                                String.format("Post[%d]=%s\nusername=%s",
-                                        i, postsList.get(i).getDescription(),
-                                        postsList.get(i).getUser().getUsername()));
                         posts.add(0, postsList.get(i));
-                        postAdapter.notifyItemInserted(posts.size() - 1);
+                        postAdapter.notifyItemInserted(0);
                     }
                 }
 
@@ -160,5 +144,15 @@ public class HomeFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
             }
         });
+    }
+
+    void showProgressBar() {
+        pbProgressBar.setVisibility(View.VISIBLE);
+            rvPosts.setVisibility(View.GONE);
+    }
+
+    void hideProgressBar () {
+        pbProgressBar.setVisibility(View.GONE);
+        rvPosts.setVisibility(View.VISIBLE);
     }
 }

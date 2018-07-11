@@ -19,9 +19,8 @@ import me.mariamdiallo.instagram.Fragment.ProfileFragment;
 import me.mariamdiallo.instagram.R;
 import me.mariamdiallo.instagram.Fragment.UploadFragment;
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.ProgressBarListener {
+public class MainActivity extends AppCompatActivity implements UploadFragment.PostListener {
 
-    MenuItem miActionProgressItem;
 
     // The list of fragments used in the view pager. They live in the activity and we pass them down
     // to the adapter upon creation.
@@ -136,30 +135,10 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.Prog
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
+    public void launchHome() {
+        viewPager.setCurrentItem(0);
+        HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.home_fragment);
+//        fragment.<specific_function_name>();
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        // Store instance of the menu item containing progress
-        miActionProgressItem = menu.findItem(R.id.miActionProgress);
-        // Return to finish
-        return super.onPrepareOptionsMenu(menu);
     }
-
-    @Override
-    public void showProgressBar() {
-        // Show progress item
-        miActionProgressItem.setVisible(true);
-    }
-
-    @Override
-    public void hideProgressBar() {
-        // Hide progress item
-        miActionProgressItem.setVisible(false);
-    }
-
 }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -23,6 +24,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText etPassword;
     EditText etEmail;
     Button btSignUp;
+    private ProgressBar pbProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etEmail = findViewById(R.id.etEmail);
         btSignUp = findViewById(R.id.btSignUp);
+        pbProgressBar = findViewById(R.id.pbProgressBar);
 
         // on click listener for "sign up" button
         btSignUp.setOnClickListener(new View.OnClickListener() {
@@ -57,9 +60,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     // sign up user in background
     private void signUp(ParseUser user) {
+        showProgressBar();
+
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
+                hideProgressBar();
+
                 if (e == null) {
                     Log.d("SignUpActivity", "SignUp Successful");
                     final Intent intent = new Intent(getBaseContext(), MainActivity.class);
@@ -68,10 +75,19 @@ public class SignUpActivity extends AppCompatActivity {
                 }
                 else {
                     Log.e("SignUpActivity", "SignUp Failure");
-                    Toast.makeText(getBaseContext(), "Sign up failed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
         });
     }
+
+    void showProgressBar() {
+        pbProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    void hideProgressBar () {
+        pbProgressBar.setVisibility(View.GONE);
+    }
+
 }

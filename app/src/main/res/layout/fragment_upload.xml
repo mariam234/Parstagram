@@ -5,49 +5,54 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.UploadFragment">
 
-    <Button
-        android:id="@+id/btCreate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etDescription"
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
         android:layout_centerHorizontal="true"
-        android:text="@string/upload_image"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="94dp" />
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:background="@android:color/black" />
 
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/btSelectImage"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginBottom="5dp"
         android:ems="10"
         android:hint="@string/description_hint"
         android:inputType="textMultiLine"
         tools:layout_editor_absoluteX="85dp"
         tools:layout_editor_absoluteY="48dp" />
 
-    <ImageView
-        android:id="@+id/ivImage"
-        android:layout_width="189dp"
-        android:layout_height="182dp"
-        android:layout_below="@+id/btRefresh"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/black" />
-
     <Button
         android:id="@+id/btSelectImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etDescription"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="68dp"
         android:text="@string/select_image" />
 
     <Button
         android:id="@+id/btTakeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivImage"
-        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/btSelectImage"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/btSelectImage"
         android:text="@string/take_image" />
+
+    <Button
+        android:id="@+id/btCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btSelectImage"
+        android:layout_centerHorizontal="true"
+        android:text="@string/upload_image" />
 
 </RelativeLayout>

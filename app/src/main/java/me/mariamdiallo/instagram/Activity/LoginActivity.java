@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -22,6 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private Button btLogin;
     private Button btSignUp;
+    private ProgressBar pbProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btLogin = findViewById(R.id.btLogin);
         btSignUp = findViewById(R.id.btSignUp);
+        pbProgressBar = findViewById(R.id.pbProgressBar);
 
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,10 +62,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login(String username, String password) {
+
+        showProgressBar();
+
         // always make network requests in background, otherwise it locks up UI
         ParseUser.logInInBackground(username, password, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException e) {
+                hideProgressBar();
+
                 if (e == null) {
                     Log.d("LoginActivity", "Login Successful");
                     launchMainActivity();
@@ -82,9 +90,17 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    //todo - add back button to menu
     void launchSignUpActivity() {
         final Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
         startActivity(intent);
-        this.finish();
+    }
+
+    void showProgressBar() {
+        pbProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    void hideProgressBar () {
+        pbProgressBar.setVisibility(View.GONE);
     }
 }

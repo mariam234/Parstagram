@@ -3,6 +3,7 @@ package me.mariamdiallo.instagram;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.mariamdiallo.instagram.models.Post;
@@ -57,8 +66,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         // populate the holder's views according to this data
         holder.tvUsername.setText(post.getUser().getUsername());
+        holder.tvUsernameBottom.setText(post.getUser().getUsername());
         holder.tvDescription.setText(post.getDescription());
-        // holder.tvTime.setText(post.getCreatedAt());
+
+        // enter time post was created at
+        Date createdAt = post.getCreatedAt();
+        PrettyTime prettyTime = new PrettyTime(Locale.getDefault());
+        String relativeCreatedAt = prettyTime.format(createdAt);
+        holder.tvTime.setText(relativeCreatedAt.toUpperCase());
 
         // load post image using glide
         Glide.with(context)
@@ -85,6 +100,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         TextView tvUsername;
         TextView tvTime;
         TextView tvDescription;
+        TextView tvUsernameBottom;
         ImageView ivHeart;
         ImageView ivComment;
         ImageView ivSave;
@@ -99,6 +115,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvUsernameBottom = itemView.findViewById(R.id.tvUsernameBottom);
             ivHeart = itemView.findViewById(R.id.ivHeart);
             ivComment = itemView.findViewById(R.id.ivComment);
             ivSave = itemView.findViewById(R.id.ivSave);
