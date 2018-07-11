@@ -7,12 +7,15 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.Date;
+
 @ParseClassName("Post")
 public class Post extends ParseObject {
     // class fields
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_USER = "user";
+    private static final String KEY_CREATED_AT = "createdAt";
 
     // accessors and mutators
     public String getDescription() {
@@ -37,6 +40,14 @@ public class Post extends ParseObject {
 
     public void setUser(ParseUser user) {
         put(KEY_USER, user);
+    }
+
+    public Date getCreatedAt() {
+        return getDate(KEY_CREATED_AT);
+    }
+
+    public void setCreatedAt(Date date) {
+        put(KEY_CREATED_AT, date);
     }
 
     public static class Query extends ParseQuery<Post> {

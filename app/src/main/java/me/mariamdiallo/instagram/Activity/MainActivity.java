@@ -1,4 +1,4 @@
-package me.mariamdiallo.instagram;
+package me.mariamdiallo.instagram.Activity;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,12 +8,20 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import me.mariamdiallo.instagram.Fragment.HomeFragment;
+import me.mariamdiallo.instagram.Fragment.ProfileFragment;
+import me.mariamdiallo.instagram.R;
+import me.mariamdiallo.instagram.Fragment.UploadFragment;
+
+public class MainActivity extends AppCompatActivity implements HomeFragment.ProgressBarListener {
+
+    MenuItem miActionProgressItem;
 
     // The list of fragments used in the view pager. They live in the activity and we pass them down
     // to the adapter upon creation.
@@ -44,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         // Instantiate our Adapter which we will use in our ViewPager
         adapter = new Adapter(getSupportFragmentManager(), fragments);
 
-        // Attach our adapter to our view pager.
+        // Attach our adapterhlutgdddlegrtvrcejkkfuidbfhduvjn to our view pager.
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -125,6 +133,33 @@ public class MainActivity extends AppCompatActivity {
         public int getCount() {
             return fragments.size();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void showProgressBar() {
+        // Show progress item
+        miActionProgressItem.setVisible(true);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        // Hide progress item
+        miActionProgressItem.setVisible(false);
     }
 
 }

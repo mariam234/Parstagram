@@ -5,6 +5,7 @@ import android.app.Application;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
+import me.mariamdiallo.instagram.R;
 import me.mariamdiallo.instagram.models.Post;
 
 public class ParseApp extends Application {
