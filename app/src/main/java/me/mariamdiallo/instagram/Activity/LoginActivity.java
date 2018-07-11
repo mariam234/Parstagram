@@ -25,6 +25,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btSignUp;
     private ProgressBar pbProgressBar;
 
+    final int REQUEST_SIGN_UP = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +95,17 @@ public class LoginActivity extends AppCompatActivity {
     //todo - add back button to menu
     void launchSignUpActivity() {
         final Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-        startActivity(intent);
+        // start activity for result so that this activity can finish after sign up is done
+        startActivityForResult(intent, REQUEST_SIGN_UP);
+    }
+
+    // finish this activity if user successfully signs up (so they don't return to login when back button is pressed)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_SIGN_UP && resultCode == RESULT_OK) {
+            launchMainActivity();
+            finish();
+        }
     }
 
     void showProgressBar() {

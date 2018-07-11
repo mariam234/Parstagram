@@ -69,12 +69,11 @@ public class SignUpActivity extends AppCompatActivity {
 
                 if (e == null) {
                     Log.d("SignUpActivity", "SignUp Successful");
-                    final Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                    startActivity(intent);
+                    setResult(RESULT_OK);
                     finish();
                 }
                 else {
-                    Log.e("SignUpActivity", "SignUp Failure");
+                    Log.e("SignUpActivit", "SignUp Failure");
                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }

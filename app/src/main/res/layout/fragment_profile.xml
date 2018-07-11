@@ -12,4 +12,15 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:text="Log Out" />
+
+    <ProgressBar
+        android:id="@+id/pbProgressBar"
+        style="?indeterminateProgressStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btLogout"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
 </RelativeLayout>
