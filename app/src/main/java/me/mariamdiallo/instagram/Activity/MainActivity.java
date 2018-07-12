@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
                         bottomNavigation.setSelectedItemId(R.id.action_home);
                         break;
                     case 1:
-                        bottomNavigation.setSelectedItemId(R.id.action_upload);
+                        // adding setselected causes dialog to show up twice
                         break;
                     case 2:
                         bottomNavigation.setSelectedItemId(R.id.action_profile);
@@ -102,15 +102,15 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
+                 switch (item.getItemId()) {
                     case R.id.action_home:
                         // Set the item to the first item in our list (home)
                         viewPager.setCurrentItem(0);
+                        setTitle("");
                         return true;
                     case R.id.action_upload:
                         // create dialog to ask user what type of upload then go to upload fragment
                         createPostDialog();
-                        viewPager.setCurrentItem(1);
                         return true;
                     case R.id.action_profile:
                         // Set the current item to the third item in our list (profile)
@@ -156,6 +156,9 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int option) {
+                // set upload fragment
+                viewPager.setCurrentItem(1);
+
                 // when "select from pictures" button is pressed, select picture
                 if (option == 0) {
                     uploadFragment.launchImageSelect();
@@ -183,6 +186,5 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         bottomNavigation.setSelectedItemId(R.id.action_home);
         viewPager.setCurrentItem(0);
         homeFragment.loadTopPosts(true);
-        homeFragment.rvPosts.smoothScrollToPosition(0);
     }
 }
