@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -32,7 +34,10 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
     HomeFragment homeFragment;
     UploadFragment uploadFragment;
     ProfileFragment profileFragment;
+
     Toolbar tbToolbar;
+    ImageView ivLogo;
+    ImageView ivCamera;
 
     private Dialog dialog;
 
@@ -54,7 +59,11 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ivLogo = findViewById(R.id.ivLogo);
+        ivCamera = findViewById(R.id.ivCamera);
         tbToolbar = findViewById(R.id.tbToolbar);
+
+        // hide title
         setSupportActionBar(tbToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
@@ -85,12 +94,14 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
+                        hideUsernameTitle();
                         bottomNavigation.setSelectedItemId(R.id.action_home);
                         break;
                     case 1:
                         // calling setSelectedItemId causes dialog to show up twice
                         break;
                     case 2:
+                        showUsernameTitle();
                         bottomNavigation.setSelectedItemId(R.id.action_profile);
                         break;
                 }
@@ -112,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                  switch (item.getItemId()) {
                     case R.id.action_home:
+                        hideUsernameTitle();
                         // Set the item to the first item in our list (home)
                         viewPager.setCurrentItem(0);
                         return true;
@@ -120,6 +132,8 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
                         createPostDialog();
                         return true;
                     case R.id.action_profile:
+                        // set title to username when on profile
+                        showUsernameTitle();
                         // Set the current item to the third item in our list (profile)
                         viewPager.setCurrentItem(2);
                         return true;
@@ -166,6 +180,9 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
                 // set upload fragment
                 viewPager.setCurrentItem(1);
 
+                // change toolbar
+                hideUsernameTitle();
+
                 // when "select from pictures" button is pressed, select picture
                 if (option == 0) {
                     uploadFragment.launchImageSelect();
@@ -197,11 +214,15 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
 
     void showUsernameTitle() {
         setTitle(ParseUser.getCurrentUser().getUsername());
-        getSupportActionBar().show();
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ivLogo.setVisibility(View.GONE);
+        ivCamera.setVisibility(View.GONE);
     }
 
     void hideUsernameTitle() {
         setTitle(getResources().getString(R.string.app_name));
-        getSupportActionBar().hide();
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ivLogo.setVisibility(View.VISIBLE);
+        ivCamera.setVisibility(View.VISIBLE);
     }
 }
