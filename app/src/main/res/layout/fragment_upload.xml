@@ -21,19 +21,20 @@
 
     <EditText
         android:id="@+id/etDescription"
-        android:layout_width="280dp"
-        android:layout_height="100dp"
-        android:layout_alignTop="@id/ivImage"
-        android:layout_toRightOf="@id/ivImage"
+        android:layout_width="243dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ivImage"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/ivImage"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
         android:ems="10"
         android:hint="@string/description_hint"
         android:inputType="textMultiLine"
         android:padding="15dp"
         android:textColorHint="@color/grey_3"
-        android:textSize="16sp"
-        tools:layout_editor_absoluteX="85dp"
-        tools:layout_editor_absoluteY="48dp" />
+        android:textSize="16sp" />
 
     <ProgressBar
         android:id="@+id/pbProgressBar"
@@ -65,9 +66,9 @@
         style="@style/ButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etLocation"
+        android:layout_below="@id/etLocation"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:text="Post" />
 
     <View

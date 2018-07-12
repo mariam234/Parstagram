@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -68,10 +71,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvUsername.setText(post.getUser().getUsername());
         holder.tvUsernameBottom.setText(post.getUser().getUsername());
         holder.tvDescription.setText(post.getDescription());
-
-        String location = post.getLocation();
-        if (location != null){
-            holder.tvLocation.setText(post.getLocation());
+        String location = post.getString("location");
+        if (location != null) {
+            holder.tvLocation.setText(location);
         }
 
         // enter time post was created at
@@ -85,11 +87,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 .load(post.getImage().getUrl())
                 .into(holder.ivImage);
 
-/*        // load (circle) profile image using glide
-        Glide.with(context)
-                .load(post.getUser.getProfileImage().getUrl())
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.ivProfileImage);*/
+        // load profile image on post if user has one
+        ParseFile profileImageFile = post.getUser().getParseFile("profileImage");
+        if (profileImageFile != null) {
+            Glide.with(context)
+                    .load(profileImageFile.getUrl())
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(holder.ivProfileImage);
+        }
     }
 
     @Override
