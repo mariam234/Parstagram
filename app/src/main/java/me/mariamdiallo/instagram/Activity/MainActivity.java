@@ -30,7 +30,11 @@ import me.mariamdiallo.instagram.Fragment.ProfileFragment;
 import me.mariamdiallo.instagram.R;
 import me.mariamdiallo.instagram.Fragment.UploadFragment;
 
-public class MainActivity extends AppCompatActivity implements UploadFragment.PostListener {
+public class MainActivity extends AppCompatActivity implements
+        UploadFragment.PostListener,
+        UploadFragment.RetakeListener,
+        ProfileFragment.EditProfileListener
+{
 
     HomeFragment homeFragment;
     UploadFragment uploadFragment;
@@ -176,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
     }
 
     // ask user whether they want to select or take image and start upload fragment accordingly
-    void createPostDialog() {
+    public void createPostDialog() {
         CharSequence options[] = new CharSequence[] {"Select from pictures", "Capture picture"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -244,5 +248,10 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
                 ivCamera.setVisibility(View.GONE);
                 break;
         }
+    }
+
+    @Override
+    public void launchEditProfile() {
+
     }
 }

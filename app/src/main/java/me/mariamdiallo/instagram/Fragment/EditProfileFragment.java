@@ -7,10 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import me.mariamdiallo.instagram.R;
 
 public class EditProfileFragment extends Fragment {
+
+    EditText etName;
+    EditText etUsername;
+    EditText bio;
+    EditText email;
 
     public EditProfileFragment() {
         // Required empty public constructor
