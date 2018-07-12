@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment {
     ArrayList<Post> posts;
 
     ProgressBar pbProgressBar;
-    RecyclerView rvPosts;
+    public RecyclerView rvPosts;
     SwipeRefreshLayout swipeContainer;
 
     Activity activity;
@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadTopPosts();
+                loadTopPosts(false);
             }
         });
 
@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment {
                 android.R.color.holo_red_light);
 
         // load posts
-        loadTopPosts();
+        loadTopPosts(true);
     }
 
     @Override
@@ -114,8 +114,10 @@ public class HomeFragment extends Fragment {
     }
 
     // loading posts
-    private void loadTopPosts() {
-        showProgressBar();
+    public void loadTopPosts(boolean withProgressBar) {
+        if (withProgressBar) {
+            showProgressBar();
+        }
 
         final Post.Query postQuery = new Post.Query();
         postQuery.getTop().withUser();

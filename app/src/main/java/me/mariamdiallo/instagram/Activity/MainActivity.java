@@ -1,5 +1,8 @@
 package me.mariamdiallo.instagram.Activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -8,8 +11,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,11 @@ import me.mariamdiallo.instagram.Fragment.UploadFragment;
 
 public class MainActivity extends AppCompatActivity implements UploadFragment.PostListener {
 
+    HomeFragment homeFragment;
+    UploadFragment uploadFragment;
+    ProfileFragment profileFragment;
+
+    private Dialog dialog;
 
     // The list of fragments used in the view pager. They live in the activity and we pass them down
     // to the adapter upon creation.
@@ -40,10 +50,15 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // instantiate fragments
+        homeFragment = new HomeFragment();
+        uploadFragment = new UploadFragment();
+        profileFragment = new ProfileFragment();
+
         // Create the fragments to be passed to the ViewPager
-        fragments.add(new HomeFragment());
-        fragments.add(new UploadFragment());
-        fragments.add(new ProfileFragment());
+        fragments.add(homeFragment);
+        fragments.add(uploadFragment);
+        fragments.add(profileFragment);
 
         // Grab a reference to our view pager.
         viewPager = findViewById(R.id.pager);
@@ -51,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         // Instantiate our Adapter which we will use in our ViewPager
         adapter = new Adapter(getSupportFragmentManager(), fragments);
 
-        // Attach our adapterhlutgdddlegrtvrcejkkfuidbfhduvjn to our view pager.
+        // Attach our adapter to our view pager.
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -89,18 +104,16 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.action_home:
-                        // Set the item to the first item in our list.
-                        // This is the home placeholder fragment.
+                        // Set the item to the first item in our list (home)
                         viewPager.setCurrentItem(0);
                         return true;
                     case R.id.action_upload:
-                        // Set the item to the first item in our list.
-                        // This is the discovery placeholder fragment.
+                        // create dialog to ask user what type of upload then go to upload fragment
+                        createPostDialog();
                         viewPager.setCurrentItem(1);
                         return true;
                     case R.id.action_profile:
-                        // Set the current item to the third item in our list
-                        // which is the profile fragment placeholder
+                        // Set the current item to the third item in our list (profile)
                         viewPager.setCurrentItem(2);
                         return true;
                     default:
@@ -134,11 +147,42 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         }
     }
 
+    // ask user whether they want to select or take image and start upload fragment accordingly
+    void createPostDialog() {
+        CharSequence options[] = new CharSequence[] {"Select from pictures", "Capture picture"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Post new image");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int option) {
+                // when "select from pictures" button is pressed, select picture
+                if (option == 0) {
+                    uploadFragment.launchImageSelect();
+                }
+                // when "capture picture" option is pressed, take picture
+                else {
+                    uploadFragment.launchImageCapture();
+                }
+
+            }
+        });
+
+        // dismiss old dialogs
+        if (dialog != null) {
+            dialog.dismiss();
+        }
+
+        // show new dialog
+        dialog = builder.show();
+    }
+
+    // method for going back to home when user creates new post
     @Override
     public void launchHome() {
+        bottomNavigation.setSelectedItemId(R.id.action_home);
         viewPager.setCurrentItem(0);
-        HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentById(R.id.home_fragment);
-//        fragment.<specific_function_name>();
-
+        homeFragment.loadTopPosts(true);
+        homeFragment.rvPosts.smoothScrollToPosition(0);
     }
 }

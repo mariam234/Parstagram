@@ -69,6 +69,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         holder.tvUsernameBottom.setText(post.getUser().getUsername());
         holder.tvDescription.setText(post.getDescription());
 
+        String location = post.getLocation();
+        if (location != null){
+            holder.tvLocation.setText(post.getLocation());
+        }
+
         // enter time post was created at
         Date createdAt = post.getCreatedAt();
         PrettyTime prettyTime = new PrettyTime(Locale.getDefault());
@@ -100,6 +105,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         TextView tvUsername;
         TextView tvTime;
         TextView tvDescription;
+        TextView tvLocation;
         TextView tvUsernameBottom;
         ImageView ivHeart;
         ImageView ivComment;
@@ -115,6 +121,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvTime = itemView.findViewById(R.id.tvTime);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvLocation = itemView.findViewById(R.id.tvLocation);
             tvUsernameBottom = itemView.findViewById(R.id.tvUsernameBottom);
             ivHeart = itemView.findViewById(R.id.ivHeart);
             ivComment = itemView.findViewById(R.id.ivComment);

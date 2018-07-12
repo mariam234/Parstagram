@@ -15,7 +15,7 @@ public class Post extends ParseObject {
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_IMAGE = "image";
     private static final String KEY_USER = "user";
-    private static final String KEY_CREATED_AT = "createdAt";
+    private static final String KEY_LOCATION = "location";
 
     // accessors and mutators
     public String getDescription() {
@@ -42,13 +42,21 @@ public class Post extends ParseObject {
         put(KEY_USER, user);
     }
 
+    public String getLocation() {
+        return getString(KEY_LOCATION);
+    }
+
+    public void setLocation(String description) {
+        put(KEY_LOCATION, description);
+    }
+
     public static class Query extends ParseQuery<Post> {
         public Query() {
             super(Post.class);
         }
 
         public Query getTop() {
-            setLimit(20);
+            setLimit(50);
             return this;
         }
 
