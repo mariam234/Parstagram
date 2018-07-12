@@ -8,4 +8,37 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="EditTextStyle" parent="Base.V7.Widget.AppCompat.EditText">
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:background">@drawable/edit_text_border</item>
+        <item name="android:ems">10</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:layout_marginEnd">30dp</item>
+        <item name="android:layout_marginStart">30dp</item>
+        <item name="android:background">@color/blue_5</item>
+        <item name="android:ems">10</item>
+        <item name="android:padding">15dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ToolbarStyle">
+        <item name="android:background">@color/grey_0</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:minHeight">50dp</item>
+    </style>
+
+    <style name="BottomNavigationStyle">
+        <item name="android:background">@color/grey_0</item>
+
+    </style>
+
 </resources>

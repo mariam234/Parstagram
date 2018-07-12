@@ -4,18 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Activity.SignUpActivity">
 
     <EditText
         android:id="@+id/etUsername"
+        style="@style/EditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/imageView2"
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName" />
@@ -26,12 +24,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/etEmail"
-        android:layout_margin="10dp"
-        android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="155dp" />
+        style="@style/EditTextStyle"/>
 
     <EditText
         android:id="@+id/etEmail"
@@ -39,12 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/etUsername"
-        android:layout_margin="10dp"
-        android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="155dp" />
+        style="@style/EditTextStyle" />
 
     <Button
         android:id="@+id/btSignUp"
@@ -52,19 +44,45 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/etPassword"
-        android:layout_margin="10dp"
         android:text="Sign Up"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="231dp" />
+        style="@style/ButtonStyle"/>
 
     <ProgressBar
         android:id="@+id/pbProgressBar"
         style="?indeterminateProgressStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btSignUp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="110dp"
+        android:layout_height="124dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:tint="@android:color/darker_gray"
+        app:srcCompat="@drawable/default_profile" />
+
+    <TextView
+        android:id="@+id/tvReturn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:padding="15dp"
+        android:text="Already have an account? Log in."
+        android:textAlignment="center"/>
+
+    <View
+        android:id="@+id/horizontalLine"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentStart="true"
+        android:background="@color/grey_2"
+        android:layout_above="@id/tvReturn"/>
 
 </RelativeLayout>

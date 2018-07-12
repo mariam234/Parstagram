@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.parse.ParseUser;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
 
         tbToolbar = findViewById(R.id.tbToolbar);
         setSupportActionBar(tbToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         // instantiate fragments
         homeFragment = new HomeFragment();
@@ -85,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
                         bottomNavigation.setSelectedItemId(R.id.action_home);
                         break;
                     case 1:
-                        // adding setselected causes dialog to show up twice
+                        // calling setSelectedItemId causes dialog to show up twice
                         break;
                     case 2:
                         bottomNavigation.setSelectedItemId(R.id.action_profile);
@@ -111,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
                     case R.id.action_home:
                         // Set the item to the first item in our list (home)
                         viewPager.setCurrentItem(0);
-                        setTitle("");
                         return true;
                     case R.id.action_upload:
                         // create dialog to ask user what type of upload then go to upload fragment
@@ -191,5 +193,15 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         bottomNavigation.setSelectedItemId(R.id.action_home);
         viewPager.setCurrentItem(0);
         homeFragment.loadTopPosts(true);
+    }
+
+    void showUsernameTitle() {
+        setTitle(ParseUser.getCurrentUser().getUsername());
+        getSupportActionBar().show();
+    }
+
+    void hideUsernameTitle() {
+        setTitle(getResources().getString(R.string.app_name));
+        getSupportActionBar().hide();
     }
 }

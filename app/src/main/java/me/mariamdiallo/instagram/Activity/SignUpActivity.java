@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -24,6 +25,7 @@ public class SignUpActivity extends AppCompatActivity {
     EditText etPassword;
     EditText etEmail;
     Button btSignUp;
+    TextView tvReturn;
     private ProgressBar pbProgressBar;
 
     @Override
@@ -36,6 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         etEmail = findViewById(R.id.etEmail);
         btSignUp = findViewById(R.id.btSignUp);
+        tvReturn = findViewById(R.id.tvReturn);
         pbProgressBar = findViewById(R.id.pbProgressBar);
 
         // on click listener for "sign up" button
@@ -56,6 +59,13 @@ public class SignUpActivity extends AppCompatActivity {
                 signUp(user);
             }
         });
+
+        tvReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     // sign up user in background
@@ -73,7 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
                     finish();
                 }
                 else {
-                    Log.e("SignUpActivit", "SignUp Failure");
+                    Log.e("SignUpActivity", "SignUp Failure");
                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
