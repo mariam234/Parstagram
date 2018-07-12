@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment {
         }
 
         final Post.Query postQuery = new Post.Query();
-        postQuery.getTop().withUser();
+        postQuery.getTop().withUser().orderByAscending("createdAt");
 
         postQuery.findInBackground(new FindCallback<Post>() {
 

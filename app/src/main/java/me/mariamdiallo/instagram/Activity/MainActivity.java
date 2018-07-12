@@ -1,8 +1,10 @@
 package me.mariamdiallo.instagram.Activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -58,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements
 
     // A reference to our bottom navigation view.
     private BottomNavigationView bottomNavigation;
+
+    final int REQUEST_EDIT_PROFILE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,8 +254,19 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    // method for starting edit profile activity
     @Override
     public void launchEditProfile() {
+        Intent intent = new Intent(this, EditProfileActivity.class);
+        startActivityForResult(intent, REQUEST_EDIT_PROFILE);
+    }
 
+    // go back to profile with updated info after user edits profile
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_EDIT_PROFILE) {
+            setCurrentItem(3);
+            profileFragment.loadProfile();
+        }
     }
 }
