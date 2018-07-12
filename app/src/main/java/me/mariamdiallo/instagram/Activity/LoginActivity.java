@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -22,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etUsername;
     private EditText etPassword;
     private Button btLogin;
-    private Button btSignUp;
+    private TextView tvSignUp;
     private ProgressBar pbProgressBar;
 
     final int REQUEST_SIGN_UP = 20;
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         btLogin = findViewById(R.id.btLogin);
-        btSignUp = findViewById(R.id.btSignUp);
+        tvSignUp = findViewById(R.id.tvSignUp);
         pbProgressBar = findViewById(R.id.pbProgressBar);
 
         btLogin.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        btSignUp.setOnClickListener(new View.OnClickListener() {
+        tvSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 launchSignUpActivity();
