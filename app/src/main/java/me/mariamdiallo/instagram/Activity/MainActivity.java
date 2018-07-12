@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseUser;
@@ -63,9 +64,20 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         ivCamera = findViewById(R.id.ivCamera);
         tbToolbar = findViewById(R.id.tbToolbar);
 
-        // hide title
+        // hide title at start
         setSupportActionBar(tbToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        // when camera icon is clicked, user can take photo
+        ivCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // set upload fragment
+                setCurrentItem(1);
+                // take photo intent
+                uploadFragment.launchImageCapture();
+            }
+        });
 
         // instantiate fragments
         homeFragment = new HomeFragment();
@@ -94,14 +106,12 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        hideUsernameTitle();
                         bottomNavigation.setSelectedItemId(R.id.action_home);
                         break;
                     case 1:
                         // calling setSelectedItemId causes dialog to show up twice
                         break;
                     case 2:
-                        showUsernameTitle();
                         bottomNavigation.setSelectedItemId(R.id.action_profile);
                         break;
                 }
@@ -123,19 +133,16 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                  switch (item.getItemId()) {
                     case R.id.action_home:
-                        hideUsernameTitle();
                         // Set the item to the first item in our list (home)
-                        viewPager.setCurrentItem(0);
+                        setCurrentItem(0);
                         return true;
                     case R.id.action_upload:
                         // create dialog to ask user what type of upload then go to upload fragment
                         createPostDialog();
                         return true;
                     case R.id.action_profile:
-                        // set title to username when on profile
-                        showUsernameTitle();
                         // Set the current item to the third item in our list (profile)
-                        viewPager.setCurrentItem(2);
+                        setCurrentItem(2);
                         return true;
                     default:
                         return false;
@@ -178,10 +185,7 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
             @Override
             public void onClick(DialogInterface dialog, int option) {
                 // set upload fragment
-                viewPager.setCurrentItem(1);
-
-                // change toolbar
-                hideUsernameTitle();
+                setCurrentItem(1);
 
                 // when "select from pictures" button is pressed, select picture
                 if (option == 0) {
@@ -208,21 +212,37 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
     @Override
     public void launchHome() {
         bottomNavigation.setSelectedItemId(R.id.action_home);
-        viewPager.setCurrentItem(0);
+        setCurrentItem(0);
         homeFragment.loadTopPosts(true);
     }
 
-    void showUsernameTitle() {
-        setTitle(ParseUser.getCurrentUser().getUsername());
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        ivLogo.setVisibility(View.GONE);
-        ivCamera.setVisibility(View.GONE);
-    }
+    void setCurrentItem(int i) {
+        viewPager.setCurrentItem(i);
+        // handle how title bar switches
+        switch (i) {
+            // home
+            case 0:
+                setTitle(getResources().getString(R.string.app_name));
+                getSupportActionBar().setDisplayShowTitleEnabled(false);
+                ivLogo.setVisibility(View.VISIBLE);
+                ivCamera.setVisibility(View.VISIBLE);
+                break;
 
-    void hideUsernameTitle() {
-        setTitle(getResources().getString(R.string.app_name));
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        ivLogo.setVisibility(View.VISIBLE);
-        ivCamera.setVisibility(View.VISIBLE);
+            // upload
+            case 1:
+                setTitle("Create new post");
+                getSupportActionBar().setDisplayShowTitleEnabled(true);
+                ivLogo.setVisibility(View.GONE);
+                ivCamera.setVisibility(View.GONE);
+                break;
+
+            // profile
+            case 2:
+                setTitle(ParseUser.getCurrentUser().getUsername());
+                getSupportActionBar().setDisplayShowTitleEnabled(true);
+                ivLogo.setVisibility(View.GONE);
+                ivCamera.setVisibility(View.GONE);
+                break;
+        }
     }
 }
