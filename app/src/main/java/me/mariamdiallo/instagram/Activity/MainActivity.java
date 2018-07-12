@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements UploadFragment.Po
         CharSequence options[] = new CharSequence[] {"Select from pictures", "Capture picture"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Post new image");
+        builder.setTitle("Create new post");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int option) {
