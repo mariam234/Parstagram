@@ -2,7 +2,6 @@ package me.mariamdiallo.instagram.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,15 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -26,8 +20,7 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.mariamdiallo.instagram.Activity.MainActivity;
-import me.mariamdiallo.instagram.PostAdapter;
+import me.mariamdiallo.instagram.Adapter.PostAdapter;
 import me.mariamdiallo.instagram.R;
 import me.mariamdiallo.instagram.models.Post;
 
