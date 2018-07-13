@@ -1,4 +1,4 @@
-package me.mariamdiallo.instagram.Activity;
+package me.mariamdiallo.instagram.activity;
 
 import android.content.Intent;
 import android.support.annotation.Nullable;

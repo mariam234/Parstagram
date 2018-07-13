@@ -1,10 +1,12 @@
-package me.mariamdiallo.instagram.Activity;
+package me.mariamdiallo.instagram.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -14,23 +16,25 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.mariamdiallo.instagram.Fragment.HomeFragment;
-import me.mariamdiallo.instagram.Fragment.ProfileFragment;
+import me.mariamdiallo.instagram.fragment.HomeFragment;
+import me.mariamdiallo.instagram.fragment.ProfileFragment;
 import me.mariamdiallo.instagram.R;
-import me.mariamdiallo.instagram.Fragment.UploadFragment;
+import me.mariamdiallo.instagram.fragment.UploadFragment;
 
 public class MainActivity extends AppCompatActivity implements
         UploadFragment.PostListener,
@@ -61,7 +65,9 @@ public class MainActivity extends AppCompatActivity implements
     // A reference to our bottom navigation view.
     private BottomNavigationView bottomNavigation;
 
-    final int REQUEST_EDIT_PROFILE = 20;
+    static final int REQUEST_EDIT_PROFILE = 20;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_SELECT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,13 +268,18 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     // go back to profile with updated info after user edits profile
+    // or if this is result from editing profile picture, save new profile picture
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_EDIT_PROFILE) {
             setCurrentItem(3);
             setTitle(ParseUser.getCurrentUser().getUsername());
             profileFragment.loadProfile();
-
+        }
+        // try fragments' on activity results
+        else {
+            profileFragment.onActivityResult(requestCode, resultCode, data);
+            uploadFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

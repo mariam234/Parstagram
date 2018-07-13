@@ -1,4 +1,4 @@
-package me.mariamdiallo.instagram.Utility;
+package me.mariamdiallo.instagram.utility;
 
 import java.util.Map;
 import java.util.NavigableMap;

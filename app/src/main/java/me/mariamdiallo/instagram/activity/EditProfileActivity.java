@@ -1,4 +1,4 @@
-package me.mariamdiallo.instagram.Activity;
+package me.mariamdiallo.instagram.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,10 +16,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -30,7 +30,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import me.mariamdiallo.instagram.Fragment.UploadFragment;
+import me.mariamdiallo.instagram.fragment.UploadFragment;
 import me.mariamdiallo.instagram.R;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -39,9 +39,13 @@ public class EditProfileActivity extends AppCompatActivity {
     EditText etUsername;
     EditText etBio;
     EditText etEmail;
-    Button btSubmit;
     ImageView ivProfileImage;
     TextView tvEditProfileImage;
+    Toolbar tbToolbar;
+    TextView tvTitle;
+    ImageView ivCancel;
+    ImageView ivSubmit;
+
     ParseUser user;
 
     ParseFile profileImageParseFile;
@@ -56,6 +60,14 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        // set up toolbar
+        tbToolbar = findViewById(R.id.tbToolbar);
+        setSupportActionBar(tbToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        tvTitle = findViewById(R.id.tvTitle);
+        String title = "Edit Profile";
+        tvTitle.setText(title);
+
         user = ParseUser.getCurrentUser();
 
         // get references to view
@@ -64,7 +76,8 @@ public class EditProfileActivity extends AppCompatActivity {
         etBio = findViewById(R.id.etBio);
         ivProfileImage = findViewById(R.id.ivProfileImage);
         etEmail = findViewById(R.id.etEmail);
-        btSubmit = findViewById(R.id.btSubmit);
+        ivCancel = findViewById(R.id.ivCancel);
+        ivSubmit = findViewById(R.id.ivSubmit);
         tvEditProfileImage = findViewById(R.id.tvEditProfileImage);
 
         // load user's existing data
@@ -95,8 +108,7 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-
-        btSubmit.setOnClickListener(new View.OnClickListener() {
+        ivSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String name = etName.getText().toString();
@@ -107,28 +119,38 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        ivCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
 
     // puts new profile image in view after selecting/capturing
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Activity activity = getParent();
         Bitmap bitmap;
         File profileImageFile;
         try {
             // if user captured image
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
                 bitmap = (Bitmap) data.getExtras().get("data");
+                // set image icon to newly selected image
+                ivProfileImage.setImageBitmap(bitmap);
                 // set imageFile to user's selected image and show image in view
                 profileImageFile = UploadFragment.bitmapToFile(bitmap, getParent());
                 profileImageParseFile = new ParseFile(profileImageFile);
             } else if (requestCode == REQUEST_IMAGE_SELECT && resultCode == Activity.RESULT_OK) {
-                InputStream stream = activity.getContentResolver().openInputStream(
+                InputStream stream = this.getContentResolver().openInputStream(
                         data.getData());
                 bitmap = BitmapFactory.decodeStream(stream);
+                // set image icon to newly selected image
+                ivProfileImage.setImageBitmap(bitmap);
 
                 // set imageFile to user's selected image and show image in view
-                profileImageFile = UploadFragment.bitmapToFile(bitmap, activity);
+                profileImageFile = UploadFragment.bitmapToFile(bitmap, this);
                 profileImageParseFile = new ParseFile(profileImageFile);
                 stream.close();
             }

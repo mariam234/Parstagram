@@ -1,4 +1,4 @@
-package me.mariamdiallo.instagram.Fragment;
+package me.mariamdiallo.instagram.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,7 +20,7 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.mariamdiallo.instagram.Adapter.PostAdapter;
+import me.mariamdiallo.instagram.adapter.PostAdapter;
 import me.mariamdiallo.instagram.R;
 import me.mariamdiallo.instagram.models.Post;
 

@@ -1,4 +1,4 @@
-package me.mariamdiallo.instagram.Activity;
+package me.mariamdiallo.instagram.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
