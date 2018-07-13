@@ -76,14 +76,11 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 hideProgressBar();
-
                 if (e == null) {
-                    Log.d("SignUpActivity", "SignUp Successful");
                     setResult(RESULT_OK);
                     finish();
                 }
                 else {
-                    Log.e("SignUpActivity", "SignUp Failure");
                     Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }

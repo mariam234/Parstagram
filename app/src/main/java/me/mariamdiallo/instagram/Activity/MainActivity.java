@@ -266,7 +266,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_EDIT_PROFILE) {
             setCurrentItem(3);
+            setTitle(ParseUser.getCurrentUser().getUsername());
             profileFragment.loadProfile();
+
         }
     }
 }
