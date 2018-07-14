@@ -43,8 +43,8 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. Fragments because they were very useful but hard to implement for me. 
+2. I wish I could've added some animations to my app. Perhaps shared element transitions from timeline or profile to details page.
 
 ## Video Walkthrough
 
