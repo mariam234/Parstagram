@@ -6,6 +6,6 @@
     <string name="select_image">Select Image</string>
     <string name="upload_image">Create Post</string>
     <!-- keys for userpost adapter view tags -->
-    <integer name="VIEW_HOLDER_KEY">5</integer>
-    <integer name="CLICK_KEY">10</integer>
+    <item type="id" name="VIEW_HOLDER_KEY"/>
+    <item type="id" name="POSITION_KEY"/>
 </resources>

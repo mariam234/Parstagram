@@ -39,12 +39,13 @@
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"
+        style="@style/BottomNavigationStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        app:menu="@menu/bottom_nav_menu"
-        style="@style/BottomNavigationStyle"/>
+        app:itemIconTint="@color/black"
+        app:menu="@menu/bottom_nav_menu" />
 
     <ImageView
         android:id="@+id/ivLogo"

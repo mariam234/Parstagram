@@ -7,10 +7,13 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
+
     // class fields
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_IMAGE = "image";

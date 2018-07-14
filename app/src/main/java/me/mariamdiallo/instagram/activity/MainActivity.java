@@ -15,10 +15,13 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -145,16 +148,21 @@ public class MainActivity extends AppCompatActivity implements
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                 setDefaultIcons();
                  switch (item.getItemId()) {
                     case R.id.action_home:
+                        // change icons appropriately
+                        item.setIcon(getResources().getDrawable(R.drawable.instagram_home_filled_24));
                         // Set the item to the first item in our list (home)
                         setCurrentItem(0);
                         return true;
                     case R.id.action_upload:
                         // create dialog to ask user what type of upload then go to upload fragment
                         createPostDialog();
+                        item.setIcon(getResources().getDrawable(R.drawable.instagram_new_post_filled_24));
                         return true;
                     case R.id.action_profile:
+                        item.setIcon(getResources().getDrawable(R.drawable.instagram_user_filled_24));
                         // Set the current item to the third item in our list (profile)
                         setCurrentItem(2);
                         return true;
@@ -163,6 +171,13 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         });
+    }
+
+    // sets navigation menu items to default (unfilled) icons - used for switching tabs
+    void setDefaultIcons() {
+        bottomNavigation.getMenu().getItem(0).setIcon(getResources().getDrawable(R.drawable.instagram_home_outline_24));
+        bottomNavigation.getMenu().getItem(1).setIcon(getResources().getDrawable(R.drawable.instagram_new_post_outline_24));
+        bottomNavigation.getMenu().getItem(2).setIcon(getResources().getDrawable(R.drawable.instagram_user_outline_24));
     }
 
     // The example view pager which we use in combination with the bottom navigation view to make
@@ -267,15 +282,15 @@ public class MainActivity extends AppCompatActivity implements
         startActivityForResult(intent, REQUEST_EDIT_PROFILE);
     }
 
-    // go back to profile with updated info after user edits profile
-    // or if this is result from editing profile picture, save new profile picture
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_EDIT_PROFILE) {
-            setCurrentItem(3);
+        // go back to profile with updated info if user edits profile
+        if (requestCode == REQUEST_EDIT_PROFILE && resultCode == RESULT_OK) {
+            Toast.makeText(this, "Profile updated.", Toast.LENGTH_LONG).show();
             setTitle(ParseUser.getCurrentUser().getUsername());
             profileFragment.loadProfile();
         }
+        // or if this is result from editing profile picture, save new profile picture
         // try fragments' on activity results
         else {
             profileFragment.onActivityResult(requestCode, resultCode, data);
