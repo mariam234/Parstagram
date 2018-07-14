@@ -1,6 +1,7 @@
 package me.mariamdiallo.instagram.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,15 +13,20 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import me.mariamdiallo.instagram.R;
+import me.mariamdiallo.instagram.activity.PostDetailsActivity;
 import me.mariamdiallo.instagram.models.Post;
 
 // adapter for posts on home
@@ -141,16 +147,37 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             // get item position
             int position = getAdapterPosition();
             // get the post at the position from posts array
-            Post post = posts.get(position);
+            Post post;
+            ParseUser user;
+            try {
+                post = posts.get(position).fetchIfNeeded();
+                user = post.getUser().fetchIfNeeded();
+                // create intent go to post details activity
+                Intent intent = new Intent(context, PostDetailsActivity.class);
+                // put post details
+                intent.putExtra("username", user.getUsername());
+                intent.putExtra("description", post.getString("description"));
+                intent.putExtra("imageUrl", post.getParseFile("image").getUrl());
 
-            switch (view.getId()) {
-                case R.id.ivHeart: {
-                    Toast.makeText(context, "Heart clicked!", Toast.LENGTH_SHORT).show();
-                    break;
-                }
-                default: {
-                    break;
-                }
+                // format date
+                Date timeRaw = post.getCreatedAt();
+                Format formatter = new SimpleDateFormat("MMMM dd, yyyy 'at' hh:mm aa");
+                String time = formatter.format(timeRaw);
+                intent.putExtra("time", time);
+
+                // check for null location and profile image
+                String locationRaw = post.getString("location");
+                String location = locationRaw == null ? "" : locationRaw;
+                intent.putExtra("location", location);
+
+                String profileImageUrlRaw = user.getParseFile("profileImage").getUrl();
+                String profileImageUrl = locationRaw == null ? "" : profileImageUrlRaw;
+                intent.putExtra("profileImageUrl", profileImageUrl);
+
+                // start details activity
+                context.startActivity(intent);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
         }
     }
