@@ -140,7 +140,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 // set image icon to newly selected image
                 ivProfileImage.setImageBitmap(bitmap);
                 // set imageFile to user's selected image and show image in view
-                profileImageFile = UploadFragment.bitmapToFile(bitmap, getParent());
+                profileImageFile = UploadFragment.bitmapToFile(bitmap, this);
                 profileImageParseFile = new ParseFile(profileImageFile);
             } else if (requestCode == REQUEST_IMAGE_SELECT && resultCode == Activity.RESULT_OK) {
                 InputStream stream = this.getContentResolver().openInputStream(
